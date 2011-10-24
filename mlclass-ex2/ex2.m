@@ -86,6 +86,27 @@ options = optimset('GradObj', 'on', 'MaxIter', 400);
 [theta, cost] = ...
 	fminunc(@(t)(costFunction(t, X, y)), initial_theta, options);
 
+
+%% =========== Kan's gradient descent implementation =============
+% Choose some alpha value
+alpha = 0.3;
+num_iters = 100;
+theta2 = zeros(3, 1);
+
+[theta2, J_history] = gradientDescent(X, y, initial_theta, alpha, num_iters);
+
+% Plot the convergence graph
+figure;
+plot(1:numel(J_history), J_history, '-b', 'LineWidth', 2);
+xlabel('Number of iterations');
+ylabel('Cost J');
+
+% Print theta to screen
+fprintf('theta2: \n');
+fprintf(' %f \n', theta2);
+%% =================================================
+
+
 % Print theta to screen
 fprintf('Cost at theta found by fminunc: %f\n', cost);
 fprintf('theta: \n');
