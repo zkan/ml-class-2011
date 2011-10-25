@@ -10,12 +10,10 @@ grad = zeros(size(theta));
 
 for iter = 1:num_iters
 
-    h = sigmoid((theta' * X')');
-    dim = size(X, 2);
+    h = sigmoid(X * theta);
     
-    theta(1) = theta(1) - (alpha * (1/m) * (sum(h - y)));
-    for i = 2:dim
-      theta(i) = theta(i) - (alpha * (1/m) * (sum((h - y)' * X(:,i))));
+    for i=1:size(theta, 1)
+      theta(i) = theta(i) - (alpha * (1 / m) * (h - y)' * X(:, i));
     end
 
     % ============================================================

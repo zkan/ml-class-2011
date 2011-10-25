@@ -20,7 +20,10 @@ grad = zeros(size(theta));
 % Note: grad should have the same dimensions as theta
 %
 
+%X * theta
 h = sigmoid((theta' * X')');
+%fprintf('log(h) %f \n', log(h));
+%fprintf('log(1 - h) %f \n', log(1 - h));
 
 J = (1 / m) * (-y' * log(h) - (1 - y)' * log(1 - h));
 
