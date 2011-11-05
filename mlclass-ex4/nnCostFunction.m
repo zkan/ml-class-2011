@@ -65,25 +65,51 @@ Theta2_grad = zeros(size(Theta2));
 % Add ones to the X data matrix
 X = [ones(m, 1) X];
 
-a1 = X;
+a_1 = X;
 
-z2 = Theta1 * a1';
-a2 = sigmoid(z2)';
-a2 = [ones(m, 1) a2];
+z_2 = Theta1 * a_1';
+a_2 = sigmoid(z_2)';
+a_2 = [ones(m, 1) a_2];
 
-z3 = Theta2 * a2';
-a3 = sigmoid(z3);
+z_3 = Theta2 * a_2';
+a_3 = sigmoid(z_3);
 
-h = a3;
+h = a_3;
 
-for k=1:num_labels
+% Compute the cost
+for k = 1:num_labels
   y_k = y == k;
   J = J + ((-log(h(k, :)) * y_k - log(1 - h(k, :)) * (1 - y_k)));
 end
-
 J = (1 / m) * J;
 J = J + (lambda / (2 * m)) * (sum(sum(Theta1(:, 2:end) .^ 2)) + sum(sum(Theta2(:, 2:end) .^ 2)));
 
+% Compute the gradient (Here I recompute the activations.)
+c = [1:num_labels]';
+for t = 1:m
+  a_1 = X(t, :);
+  
+  z_2 = Theta1 * a_1';
+  a_2 = sigmoid(z_2)';
+  a_2 = [1 a_2];
+
+  z_3 = Theta2 * a_2';
+  a_3 = sigmoid(z_3);
+
+  error_term_3 = a_3 - (y(t) == c);
+  error_term_2 = (Theta2' * error_term_3) .* [1; sigmoidGradient(z_2)];
+  
+  Theta1_grad = Theta1_grad + (error_term_2(2:end) * a_1);
+  Theta2_grad = Theta2_grad + (error_term_3 * a_2);
+end
+
+Theta1_grad(:, 1) = Theta1_grad(:, 1) / m;
+Theta1_grad(:, 2:end) = Theta1_grad(:, 2:end) / m + ...
+  ((lambda / m) * Theta1(:, 2:end));
+
+Theta2_grad(:, 1) = Theta2_grad(:, 1) / m;
+Theta2_grad(:, 2:end) = Theta2_grad(:, 2:end) / m + ...
+  ((lambda / m) * Theta2(:, 2:end));
 
 % -------------------------------------------------------------
 
