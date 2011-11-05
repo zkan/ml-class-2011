@@ -62,22 +62,26 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+% Add ones to the X data matrix
+X = [ones(m, 1) X];
 
+a1 = X;
 
+z2 = Theta1 * a1';
+a2 = sigmoid(z2)';
+a2 = [ones(m, 1) a2];
 
+z3 = Theta2 * a2';
+a3 = sigmoid(z3);
 
+h = a3;
 
+for k=1:num_labels
+  y_k = y == k;
+  J = J + ((-log(h(k, :)) * y_k - log(1 - h(k, :)) * (1 - y_k)));
+end
 
-
-
-
-
-
-
-
-
-
-
+J = (1 / m) * J;
 
 
 % -------------------------------------------------------------
